@@ -26,8 +26,9 @@ MainWindow::MainWindow(QWidget *parent)
     // Set the title of the main window
     setWindowTitle("Embedded System Lab Management");
 
-    // Set the window icon
-    setWindowIcon(QIcon(":/path/to/your/icon.png"));
+    // Set the window icon using the given file path
+            setWindowIcon(QIcon("C:/Users/Ahmed/OneDrive/Documents/eslabProject/eslab/logo.ico"));
+
 
     setupGridLayout();
     //"C:/Users/ahmedabdel-ghany/Documents/EmbeddedLabProject/eslab.db"
@@ -74,6 +75,8 @@ void MainWindow::loadAllData() {
     // Hide grid lines in the table view
     tableView->setShowGrid(false);
 
+
+
     tableView->setModel(model);
     tableView->resizeColumnsToContents();
     // If you want to use stylesheets for more advanced styling
@@ -106,19 +109,21 @@ void MainWindow::setupGridLayout() {
     gridLayout->setColumnStretch(0, 1);  // 1% for first column
     gridLayout->setColumnStretch(1, 22); // 22% for second column
     gridLayout->setColumnStretch(2, 1);  // 1% for third column
-    gridLayout->setColumnStretch(3, 75); // 70% for fourth column
-    gridLayout->setColumnStretch(4, 1);  // 1% for fifth column
+    gridLayout->setColumnStretch(3, 60); // 60% for fourth column
+    gridLayout->setColumnStretch(4, 10);  // 10% for fifth column
+    gridLayout->setColumnStretch(5, 1);  // 1% for sixth column
+
 
     // Set row stretch factors
     gridLayout->setRowStretch(0, 1);     // 1% for first row
-    for (int row = 1; row < 9; ++row) {
+    for (int row = 1; row < 11; ++row) {
         gridLayout->setRowStretch(row, 10); // Evenly distribute middle rows
     }
-    gridLayout->setRowStretch(9, 1);     // 1% for last row
+    gridLayout->setRowStretch(11, 1);     // 1% for last row
 
     // Initialize tableView and add it to the grid layout
     tableView = new QTableView(centralWidget);
-    gridLayout->addWidget(tableView, 3, 3, 6, 1); // Span from row 4 to row 9 (6 rows) in the third column
+    gridLayout->addWidget(tableView, 3, 3, 8, 2); // Span from row 3 to row 11 (6 rows) in the third column
     tableView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
     tableView->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
 
@@ -131,14 +136,13 @@ void MainWindow::setupGridLayout() {
     QWidget *blueBackgroundWidget = new QWidget;
     blueBackgroundWidget->setStyleSheet(
         "background: qlineargradient("
-        "x1:0, y1:0, x2:0, y2:1, "
         "stop:0 rgba(45,64,134,255), "
         "stop:1 rgba(20,36,65,255));"
         "border-radius: 10px;" // Adjust the radius as needed
 
         );
     // Add it to the layout with a row span
-    gridLayout->addWidget(blueBackgroundWidget, 1, 1, 8, 1); // Row, Column, RowSpan, ColumnSpan
+    gridLayout->addWidget(blueBackgroundWidget, 1, 1, 10, 1); // Row, Column, RowSpan, ColumnSpan
 
 
     // Initialize searchLineEdit and add it to the grid layout
@@ -154,7 +158,7 @@ void MainWindow::setupGridLayout() {
         "    selection-background-color: darkgray;"  // Optional: Adjust selection color
         "}"
         );
-    gridLayout->addWidget(searchLineEdit, 1, 3, 2, 1);// Row, Column, RowSpan, ColumnSpan
+    gridLayout->addWidget(searchLineEdit, 2, 3, 1, 1);// Row, Column, RowSpan, ColumnSpan
 
 
     setCentralWidget(centralWidget);
