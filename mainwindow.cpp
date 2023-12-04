@@ -22,8 +22,8 @@ MainWindow::MainWindow(QWidget *parent)
 
     ui->setupUi(this);
     setupGridLayout();
-    loadAllData();
-    initializeDatabase();
+    //"C:/Users/ahmedabdel-ghany/Documents/EmbeddedLabProject/eslab.db"
+    setupDatabaseConnection("C:/Users/Ahmed/OneDrive/Documents/eslabProject/eslab/eslab.db");
     setupUIComponents();
     connectSignalsAndSlots();
 }
@@ -33,9 +33,7 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-void MainWindow::initializeDatabase() {
-    //QString dbFilePath = "C:/Users/ahmedabdel-ghany/Documents/EmbeddedLabProject/eslab.db"
-    QString dbFilePath = "C:/Users/Ahmed/OneDrive/Documents/eslabProject/eslab/eslab.db";
+void MainWindow::setupDatabaseConnection(const QString &dbFilePath) {
     QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE");
     db.setDatabaseName(dbFilePath);
 

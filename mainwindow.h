@@ -27,7 +27,7 @@ private:
     void setupUIComponents();
     void connectSignalsAndSlots();
     void setupGridLayout();
-    void initializeDatabase(); // Initializes the database connection
+    void setupDatabaseConnection(const QString&); // Initializes the database connection
     void loadAllData(); // Loads data into the table view
 };
 
