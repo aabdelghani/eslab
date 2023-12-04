@@ -17,7 +17,8 @@
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent), ui(new Ui::MainWindow),
     searchLineEdit(new QLineEdit(this)),
-    tableView(new QTableView(this))
+    tableView(new QTableView(this)),
+    blueBackgroundWidget(new QWidget(this))
 {
     // Set window flags to remove the title bar
     setWindowFlags(Qt::FramelessWindowHint);
@@ -122,7 +123,7 @@ void MainWindow::setupGridLayout() {
     gridLayout->setRowStretch(11, 1);     // 1% for last row
 
     // Initialize tableView and add it to the grid layout
-    tableView = new QTableView(centralWidget);
+    //tableView = new QTableView(centralWidget);
     gridLayout->addWidget(tableView, 3, 3, 8, 2); // Span from row 3 to row 11 (6 rows) in the third column
     tableView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
     tableView->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
@@ -133,7 +134,7 @@ void MainWindow::setupGridLayout() {
     gridLayout->setContentsMargins(0, 0, 0, 0); // This will set the margins to zero on all sides
 
     // Create one widget with a gradient background spanning from row 2 to row 9
-    QWidget *blueBackgroundWidget = new QWidget;
+    //blueBackgroundWidget = new QWidget (centralWidget);
     blueBackgroundWidget->setStyleSheet(
         "background: qlineargradient("
         "stop:0 rgba(45,64,134,255), "
@@ -146,7 +147,7 @@ void MainWindow::setupGridLayout() {
 
 
     // Initialize searchLineEdit and add it to the grid layout
-    searchLineEdit = new QLineEdit(centralWidget);
+    //searchLineEdit = new QLineEdit(centralWidget);
     searchLineEdit->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     searchLineEdit->setPlaceholderText("Enter search text");
     // Style the searchLineEdit with rounded edges

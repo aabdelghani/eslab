@@ -24,6 +24,7 @@ private:
     Ui::MainWindow *ui;
     QLineEdit *searchLineEdit; // The search box for inputting queries
     QTableView *tableView; // Table view to display data
+    QWidget *blueBackgroundWidget; //left hand panel
     void setupUIComponents();
     void connectSignalsAndSlots();
     void setupGridLayout();
