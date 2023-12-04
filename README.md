@@ -44,7 +44,7 @@ If you encounter any issues or have questions, please open an issue on the GitHu
 - Ahmed Abdelghany - Initial work
 
 ## License
-This project is licensed under the GNU GPLv3 - see the LICENSE.md file for details.
+This project is licensed under the BSD 3-clause - see the LICENSE.md file for details.
 
 ## Acknowledgments
 - AUC Embedded Systems Lab team.
