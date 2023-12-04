@@ -31,6 +31,7 @@ MainWindow::~MainWindow()
 }
 
 void MainWindow::initializeDatabase() {
+    //QString dbFilePath = "C:/Users/ahmedabdel-ghany/Documents/EmbeddedLabProject/eslab.db"
     QString dbFilePath = "C:/Users/Ahmed/OneDrive/Documents/eslabProject/eslab/eslab.db";
     QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE");
     db.setDatabaseName(dbFilePath);
