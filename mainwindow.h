@@ -4,7 +4,7 @@
 #include <QMainWindow>
 #include <QLineEdit>
 #include <QTableView>
-
+#include <QSqlQuery>
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
@@ -30,6 +30,9 @@ private:
     void setupGridLayout();
     void setupDatabaseConnection(const QString&); // Initializes the database connection
     void loadAllData(); // Loads data into the table view
+    // Add new method declarations
+    void configureTableView();
+    void setModelQuery(QSqlQuery&&);
 };
 
 #endif // MAINWINDOW_H

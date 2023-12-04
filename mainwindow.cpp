@@ -12,7 +12,8 @@
 #include <QPushButton>
 #include <QWidget>
 #include <QIcon>
-
+#include <customsqlquerymodel.h>
+#include <QHeaderView>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent), ui(new Ui::MainWindow),
@@ -36,6 +37,8 @@ MainWindow::MainWindow(QWidget *parent)
     setupDatabaseConnection("C:/Users/Ahmed/OneDrive/Documents/eslabProject/eslab/eslab.db");
     setupUIComponents();
     connectSignalsAndSlots();
+
+
 }
 
 MainWindow::~MainWindow()
@@ -71,17 +74,7 @@ void MainWindow::connectSignalsAndSlots() {
 
 void MainWindow::loadAllData() {
     QSqlQuery query("SELECT locker_number, component_img,component_name,  component_qty, componenet_description, borrowed_status, borrower_name, borrower_id, borrowing_date, return_date, Status, Notes FROM component");
-    QSqlQueryModel *model = new QSqlQueryModel;
-    model->setQuery(std::move(query));
-    // Hide grid lines in the table view
-    tableView->setShowGrid(false);
-
-
-
-    tableView->setModel(model);
-    tableView->resizeColumnsToContents();
-    // If you want to use stylesheets for more advanced styling
-    tableView->setStyleSheet("QTableView {gridline-color: transparent;}");
+    setModelQuery(std::move(query));
 }
 
 void MainWindow::onSearchTextChanged(const QString &text) {
@@ -93,13 +86,78 @@ void MainWindow::onSearchTextChanged(const QString &text) {
     QSqlQuery query;
     query.prepare("SELECT * FROM component WHERE component_name LIKE :name");
     query.bindValue(":name", "%" + text + "%");
+    setModelQuery(std::move(query));
+}
+
+
+void MainWindow::setModelQuery(QSqlQuery &&query) {
     if (query.exec()) {
-        QSqlQueryModel *model = new QSqlQueryModel;
+        CustomSqlQueryModel *model = new CustomSqlQueryModel;
         model->setQuery(std::move(query));
         tableView->setModel(model);
+        configureTableView();
     } else {
-        qDebug() << "Search query error:" << query.lastError().text();
+        qDebug() << "Query execution error:" << query.lastError().text();
     }
+}
+void MainWindow::configureTableView() {
+    // Set custom header names
+    auto *model = dynamic_cast<CustomSqlQueryModel *>(tableView->model());
+    if (model) { // Make sure the model is valid before setting header data
+        // Set custom header names
+        model->setHeaderData(0, Qt::Horizontal, QObject::tr("Locker"));
+        model->setHeaderData(1, Qt::Horizontal, QObject::tr("Image"));
+        model->setHeaderData(2, Qt::Horizontal, QObject::tr("Component"));
+        model->setHeaderData(3, Qt::Horizontal, QObject::tr("Quantity"));
+        model->setHeaderData(4, Qt::Horizontal, QObject::tr("Description"));
+        model->setHeaderData(5, Qt::Horizontal, QObject::tr("Borrowed Status"));
+        model->setHeaderData(6, Qt::Horizontal, QObject::tr("Borrower"));
+        model->setHeaderData(7, Qt::Horizontal, QObject::tr("Borrower ID"));
+        model->setHeaderData(8, Qt::Horizontal, QObject::tr("Borrowing Date"));
+        model->setHeaderData(9, Qt::Horizontal, QObject::tr("Return Date"));
+        model->setHeaderData(10, Qt::Horizontal, QObject::tr("Status"));
+        model->setHeaderData(11, Qt::Horizontal, QObject::tr("Notes"));
+
+        // Resize each column to fit its content
+        for (int i = 0; i < model->columnCount(); ++i) {
+            tableView->resizeColumnToContents(i);
+        }
+    }
+    // Hide the vertical header (the row numbers)
+    tableView->verticalHeader()->hide();
+    // Make scrollbars invisible but functional by setting their style
+    // Hide scrollbar arrows but keep the scrollbar itself visible
+    // Customize the scrollbar to hide arrows and remove shadows
+    tableView->setStyleSheet(R"(
+        QScrollBar:vertical, QScrollBar:horizontal {
+            border: none;
+            background: white;
+            width: 10px; /* Adjust the width as needed */
+            height: 10px; /* Adjust the height as needed */
+        }
+        QScrollBar::handle:vertical, QScrollBar::handle:horizontal {
+            background: black; /* Color of the scrollbar handle */
+            border: none; /* Remove borders */
+            border-radius: 6px; /* Optional: Set to 0 to have square corners */
+        }
+        QScrollBar::add-line, QScrollBar::sub-line {
+            border: none;
+            background: none;
+        }
+        QScrollBar::up-arrow, QScrollBar::down-arrow,
+        QScrollBar::left-arrow, QScrollBar::right-arrow {
+            width: 0px;
+            height: 0px;
+            background: none;
+        }
+        QScrollBar::add-page, QScrollBar::sub-page {
+            background: none;
+        }
+        QTableView {
+            gridline-color: transparent;
+            /* Include other styling for QTableView here if necessary */
+        }
+    )");
 }
 
 void MainWindow::setupGridLayout() {
@@ -147,7 +205,6 @@ void MainWindow::setupGridLayout() {
 
 
     // Initialize searchLineEdit and add it to the grid layout
-    //searchLineEdit = new QLineEdit(centralWidget);
     searchLineEdit->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     searchLineEdit->setPlaceholderText("Enter search text");
     // Style the searchLineEdit with rounded edges
