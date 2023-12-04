@@ -6,9 +6,7 @@
 #include <QTableView>
 
 QT_BEGIN_NAMESPACE
-namespace Ui {
-class MainWindow;
-}
+namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
 
 class MainWindow : public QMainWindow
@@ -24,9 +22,12 @@ private slots:
 
 private:
     Ui::MainWindow *ui;
-    QLineEdit *searchLineEdit; // The search box
-    QTableView *tableView; // Add this if you want to show results in a table
-    void loadAllData(); // Add this line to declare the function
-
+    QLineEdit *searchLineEdit; // The search box for inputting queries
+    QTableView *tableView; // Table view to display data
+    void setupUIComponents();
+    void connectSignalsAndSlots();
+    void initializeDatabase(); // Initializes the database connection
+    void loadAllData(); // Loads data into the table view
 };
+
 #endif // MAINWINDOW_H
