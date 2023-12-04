@@ -27,6 +27,9 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
     // Set the title of the main window
     setWindowTitle("Embedded System Lab Management");
+    /* Adjust the radius for rounded corners */
+    setStyleSheet("background-color: white; border-radius: 20px;");
+
 
     // Set the window icon using the given file path
             setWindowIcon(QIcon("C:/Users/Ahmed/OneDrive/Documents/eslabProject/eslab/logo.ico"));
@@ -136,8 +139,11 @@ void MainWindow::configureTableView() {
             height: 10px; /* Adjust the height as needed */
         }
         QScrollBar::handle:vertical, QScrollBar::handle:horizontal {
-            background: black; /* Color of the scrollbar handle */
-            border: none; /* Remove borders */
+            background: qlineargradient(
+            x1:0, y1:0, x2:0, y2:1,
+            stop:0 rgba(45,64,134,255),
+            stop:1 rgba(20,36,65,255));
+            border: 6px; /* Remove borders */
             border-radius: 6px; /* Optional: Set to 0 to have square corners */
         }
         QScrollBar::add-line, QScrollBar::sub-line {
@@ -155,8 +161,11 @@ void MainWindow::configureTableView() {
         }
         QTableView {
             gridline-color: transparent;
+            border-radius: 20px; /* Adjust the radius for rounded corners */
+
             /* Include other styling for QTableView here if necessary */
         }
+
     )");
 }
 
@@ -195,6 +204,7 @@ void MainWindow::setupGridLayout() {
     //blueBackgroundWidget = new QWidget (centralWidget);
     blueBackgroundWidget->setStyleSheet(
         "background: qlineargradient("
+         "x1:0, y1:0, x2:0, y2:1, "
         "stop:0 rgba(45,64,134,255), "
         "stop:1 rgba(20,36,65,255));"
         "border-radius: 10px;" // Adjust the radius as needed
