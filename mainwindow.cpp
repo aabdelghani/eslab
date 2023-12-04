@@ -17,6 +17,9 @@ MainWindow::MainWindow(QWidget *parent)
     searchLineEdit(new QLineEdit(this)),
     tableView(new QTableView(this))
 {
+    // Set window flags to remove the title bar
+    setWindowFlags(Qt::FramelessWindowHint);
+
     ui->setupUi(this);
     setupGridLayout();
     loadAllData();
@@ -106,6 +109,24 @@ void MainWindow::setupGridLayout() {
     gridLayout->addWidget(tableView, 2, 3, 7, 1); // Span from row 3 to row 9 (7 rows) in the third column
     tableView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
     tableView->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
+
+
+    // Eliminate padding between cells
+    gridLayout->setSpacing(0); // This will set both horizontal and vertical spacing to zero
+    gridLayout->setContentsMargins(0, 0, 0, 0); // This will set the margins to zero on all sides
+
+    // Create one widget with a gradient background spanning from row 2 to row 9
+    QWidget *blueBackgroundWidget = new QWidget;
+    blueBackgroundWidget->setStyleSheet(
+        "background: qlineargradient("
+        "x1:0, y1:0, x2:0, y2:1, "
+        "stop:0 rgba(45,64,134,255), "
+        "stop:1 rgba(20,36,65,255));"
+        "border-radius: 10px;" // Adjust the radius as needed
+
+        );
+    // Add it to the layout with a row span
+    gridLayout->addWidget(blueBackgroundWidget, 1, 1, 8, 1); // Row, Column, RowSpan, ColumnSpan
 
 
     // Initialize searchLineEdit and add it to the grid layout
