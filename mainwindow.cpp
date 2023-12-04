@@ -8,6 +8,9 @@
 #include <QDebug>
 #include <QScreen>
 #include <QScrollArea>
+#include <QGridLayout>
+#include <QPushButton>
+#include <QWidget>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent), ui(new Ui::MainWindow),
@@ -15,6 +18,8 @@ MainWindow::MainWindow(QWidget *parent)
     tableView(new QTableView(this))
 {
     ui->setupUi(this);
+    setupGridLayout();
+    loadAllData();
     initializeDatabase();
     setupUIComponents();
     connectSignalsAndSlots();
@@ -42,23 +47,6 @@ void MainWindow::setupUIComponents() {
     QRect screenGeometry = QGuiApplication::primaryScreen()->geometry();
     int width = screenGeometry.width() * 0.75;
     int height = screenGeometry.height() * 0.75;
-
-    // Set up searchLineEdit
-    searchLineEdit->setPlaceholderText("Enter search text");
-    searchLineEdit->resize(width / 2, 20);
-    searchLineEdit->move(width / 2 + 10, 10);
-
-    // Set up tableView and its scroll area
-    QScrollArea *scrollArea = new QScrollArea(this);
-    scrollArea->setWidgetResizable(true);
-    scrollArea->setWidget(tableView);
-    tableView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
-    tableView->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
-    tableView->resize(width, height - 50);
-    tableView->move(width / 2 + 10, 40);
-    scrollArea->resize(width, height - 50);
-    scrollArea->move(width / 2 + 10, 40);
-
     // Configure the main window
     setFixedSize(width, height);
 }
@@ -94,4 +82,34 @@ void MainWindow::onSearchTextChanged(const QString &text) {
     }
 }
 
-// Add the implementation for onAddItemButtonClicked if you have this functionality
+void MainWindow::setupGridLayout() {
+    QWidget *centralWidget = new QWidget(this);
+    QGridLayout *gridLayout = new QGridLayout(centralWidget);
+
+    // Set column stretch factors based on the desired percentage widths
+    gridLayout->setColumnStretch(0, 1);  // 1% for first column
+    gridLayout->setColumnStretch(1, 22); // 20% for second column
+    gridLayout->setColumnStretch(2, 1);  // 1% for third column
+    gridLayout->setColumnStretch(3, 75); // 70% for fourth column
+    gridLayout->setColumnStretch(4, 1);  // 1% for fifth column
+
+    // Set row stretch factors
+    gridLayout->setRowStretch(0, 1);     // 2% for first row
+    for (int row = 1; row < 9; ++row) {
+        gridLayout->setRowStretch(row, 10); // Evenly distribute middle rows
+    }
+    gridLayout->setRowStretch(9, 1);     // 1% for last row
+
+    // Initialize tableView and add it to the grid layout
+    tableView = new QTableView(centralWidget);
+    gridLayout->addWidget(tableView, 2, 3, 7, 1); // Span from row 3 to row 9 (7 rows) in the third column
+    tableView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
+    tableView->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
+
+
+    // Initialize searchLineEdit and add it to the grid layout
+    searchLineEdit = new QLineEdit(centralWidget);
+    searchLineEdit->setPlaceholderText("Enter search text");
+    gridLayout->addWidget(searchLineEdit, 1, 3, 1, 1); // Placed in row 2, column 3, spanning 1 row and 1 column
+    setCentralWidget(centralWidget);
+}

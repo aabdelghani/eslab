@@ -26,6 +26,7 @@ private:
     QTableView *tableView; // Table view to display data
     void setupUIComponents();
     void connectSignalsAndSlots();
+    void setupGridLayout();
     void initializeDatabase(); // Initializes the database connection
     void loadAllData(); // Loads data into the table view
 };
