@@ -31,7 +31,7 @@ MainWindow::MainWindow(QWidget *parent)
     // Set the title of the main window
     setWindowTitle("Embedded System Lab Management");
     /* Adjust the radius for rounded corners */
-    setStyleSheet("QMainWindow { background-color: white; border-radius: 7px; border: 3px solid gray; }");
+    setStyleSheet("QMainWindow { background-color: white; border-radius: 8px; border: 3px solid white; }");
 
 
     // Set the window icon using the given file path
