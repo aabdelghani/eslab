@@ -1,6 +1,7 @@
 #include "mainwindow.h"
 #include "CustomRowHeightDelegate.h"
 #include "ui_mainwindow.h"
+#include "colormanager.h"
 
 #include <QSqlDatabase>
 #include <QSqlError>
@@ -18,7 +19,11 @@
 #include <QItemDelegate>
 #include <QPainter>
 #include <QKeyEvent>
-#define BASE_COLOR_BLUE rgba(20,36,65,255)
+
+
+QString darkBlue = ColorManager::getDarkBlueColor();
+QString lightBlue = ColorManager::getLightBlueColor();
+
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent), ui(new Ui::MainWindow),
     searchLineEdit(new QLineEdit(this)),
@@ -170,9 +175,7 @@ void MainWindow::configureTableView() {
    // tableView->setItemDelegate(new CustomRowHeightDelegate(desiredRowHeight));
     // Hide the vertical header (the row numbers)
     tableView->verticalHeader()->hide();
-    // Set the row height to 24 pixels
-    int desiredRowHeight = 24;
-    tableView->verticalHeader()->setDefaultSectionSize(desiredRowHeight);
+
     // Make scrollbars invisible but functional by setting their style
     // Hide scrollbar arrows but keep the scrollbar itself visible
     // Customize the scrollbar to hide arrows and remove shadows
@@ -184,7 +187,7 @@ void MainWindow::configureTableView() {
             height: 10px; /* Adjust the height as needed */
         }
         QScrollBar::handle:vertical, QScrollBar::handle:horizontal {
-            background: BASE_COLOR_BLUE;
+            background: rgba(43,87,154,255);
             border: none; /* Remove borders */
             border-width: 1px;
             border-radius: 5px; /* Optional: Set to 0 to have square corners */
@@ -210,7 +213,7 @@ void MainWindow::configureTableView() {
         }
 
         QHeaderView::section {
-            background-color: rgba(20, 36, 65, 255);
+            background-color: rgba(43,87,154,255);
             color: white;
             border: none;
             font: bold 14px; /* Add 'bold' to make the font bold */
@@ -220,6 +223,7 @@ void MainWindow::configureTableView() {
 
 
     )");
+
 
     //alternating the row colors, base is white, the alternate-base is grey
     tableView->setItemDelegate(new AlternateRowDelegate);
@@ -260,15 +264,14 @@ void MainWindow::setupGridLayout() {
     gridLayout->setSpacing(0); // This will set both horizontal and vertical spacing to zero
     gridLayout->setContentsMargins(0, 0, 0, 0); // This will set the margins to zero on all sides
 
-    // Create one widget with a gradient background spanning from row 2 to row 9
-    //blueBackgroundWidget = new QWidget (centralWidget);
-    blueBackgroundWidget->setStyleSheet(
-        "background: qlineargradient("
-         "x1:0, y1:0, x2:0, y2:1, "
-        "stop:0 rgba(45,64,134,255), "
-        "stop:1 BASE_COLOR_BLUE);"
-        "border-radius: 10px;" // Adjust the radius as needed
 
+    // Use variables in the style sheet
+    blueBackgroundWidget->setStyleSheet(
+        QString("background: qlineargradient("
+                "x1:0, y1:0, x2:0, y2:1, "
+                "stop:0 %1, "  // Dark blue color variable
+                "stop:1 %2);" // Light blue color variable
+                "border-radius: 10px;").arg(lightBlue).arg(darkBlue)
         );
     // Add it to the layout with a row span
     gridLayout->addWidget(blueBackgroundWidget, 1, 1, 10, 1); // Row, Column, RowSpan, ColumnSpan
@@ -290,7 +293,7 @@ void MainWindow::setupGridLayout() {
         "    padding: 5px 8px;"
         "    selection-background-color: darkgray;"
         "    font-size: 24px;"
-        "    color: BASE_COLOR_BLUE;"
+        "    color: rgba(43,87,154,255);"
         "    margin-bottom: 5px;" // Add a bottom margin of 5 pixels
         "}"
         );

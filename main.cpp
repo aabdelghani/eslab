@@ -36,12 +36,12 @@ int main(int argc, char *argv[])
     QCoreApplication::processEvents(); // Process events to display the splash screen
 
     // Establishing connections
-    splash.showMessage("Established connections", Qt::AlignCenter, Qt::black);
+    splash.showMessage("Running...", Qt::AlignCenter | Qt::AlignBottom, Qt::white);
     QCoreApplication::processEvents();
 
     MainWindow w;
     // Using a single-shot timer to delay the execution of the lambda function
-    QTimer::singleShot(4000, [&]() { // 4000 milliseconds = 4 seconds
+    QTimer::singleShot(500, [&]() { // 4000 milliseconds = 4 seconds
         w.show();
         splash.finish(&w);
     });
