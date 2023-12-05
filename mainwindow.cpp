@@ -14,6 +14,9 @@
 #include <QIcon>
 #include <customsqlquerymodel.h>
 #include <QHeaderView>
+#include <QItemDelegate>
+#include <QPainter>
+#include <QKeyEvent>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent), ui(new Ui::MainWindow),
@@ -32,7 +35,7 @@ MainWindow::MainWindow(QWidget *parent)
 
 
     // Set the window icon using the given file path
-            setWindowIcon(QIcon("C:/Users/Ahmed/OneDrive/Documents/eslabProject/eslab/logo.ico"));
+    setWindowIcon(QIcon("C:/Users/Ahmed/OneDrive/Documents/eslabProject/eslab/logo.ico"));
 
 
     setupGridLayout();
@@ -43,6 +46,33 @@ MainWindow::MainWindow(QWidget *parent)
 
 
 }
+
+void MainWindow::keyPressEvent(QKeyEvent *event)
+{
+    if (event->key() == Qt::Key_W && event->modifiers() == Qt::ControlModifier) {
+        // Check if Ctrl+W is pressed
+        QApplication::quit(); // Quit the application
+    } else {
+        QMainWindow::keyPressEvent(event);
+    }
+}
+// Custom delegate class to alternate row colors
+class AlternateRowDelegate : public QItemDelegate {
+public:
+    AlternateRowDelegate(QObject* parent = nullptr) : QItemDelegate(parent) {}
+
+    void paint(QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index) const override {
+        if (index.row() % 2 == 0) {
+            // Even rows: white background
+            painter->fillRect(option.rect, Qt::white);
+        } else {
+            // Odd rows: super light grey background
+            painter->fillRect(option.rect, QColor(245, 245, 245)); // Adjust the color as needed
+        }
+
+        QItemDelegate::paint(painter, option, index);
+    }
+};
 
 MainWindow::~MainWindow()
 {
@@ -92,7 +122,6 @@ void MainWindow::onSearchTextChanged(const QString &text) {
     setModelQuery(std::move(query));
 }
 
-
 void MainWindow::setModelQuery(QSqlQuery &&query) {
     if (query.exec()) {
         CustomSqlQueryModel *model = new CustomSqlQueryModel;
@@ -103,6 +132,7 @@ void MainWindow::setModelQuery(QSqlQuery &&query) {
         qDebug() << "Query execution error:" << query.lastError().text();
     }
 }
+
 void MainWindow::configureTableView() {
     // Set custom header names
     auto *model = dynamic_cast<CustomSqlQueryModel *>(tableView->model());
@@ -139,12 +169,10 @@ void MainWindow::configureTableView() {
             height: 10px; /* Adjust the height as needed */
         }
         QScrollBar::handle:vertical, QScrollBar::handle:horizontal {
-            background: qlineargradient(
-            x1:0, y1:0, x2:0, y2:1,
-            stop:0 rgba(45,64,134,255),
-            stop:1 rgba(20,36,65,255));
-            border: 6px; /* Remove borders */
-            border-radius: 6px; /* Optional: Set to 0 to have square corners */
+            background: rgba(20,36,65,255);
+            border: none; /* Remove borders */
+            border-width: 1px;
+            border-radius: 5px; /* Optional: Set to 0 to have square corners */
         }
         QScrollBar::add-line, QScrollBar::sub-line {
             border: none;
@@ -166,7 +194,9 @@ void MainWindow::configureTableView() {
             /* Include other styling for QTableView here if necessary */
         }
 
+
     )");
+    tableView->setItemDelegate(new AlternateRowDelegate);
 }
 
 void MainWindow::setupGridLayout() {

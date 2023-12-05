@@ -20,6 +20,9 @@ public:
 private slots:
     void onSearchTextChanged(const QString &text); // Slot for search text changes
 
+protected:
+    void keyPressEvent(QKeyEvent *event) override;
+
 private:
     Ui::MainWindow *ui;
     QLineEdit *searchLineEdit; // The search box for inputting queries
@@ -33,6 +36,8 @@ private:
     // Add new method declarations
     void configureTableView();
     void setModelQuery(QSqlQuery&&);
+
+
 };
 
 #endif // MAINWINDOW_H
