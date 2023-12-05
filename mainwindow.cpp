@@ -31,7 +31,7 @@ MainWindow::MainWindow(QWidget *parent)
     // Set the title of the main window
     setWindowTitle("Embedded System Lab Management");
     /* Adjust the radius for rounded corners */
-    setStyleSheet("background-color: white; border-radius: 20px;");
+    setStyleSheet("QMainWindow { background-color: white; border-radius: 7px; border: 3px solid gray; }");
 
 
     // Set the window icon using the given file path
@@ -197,6 +197,9 @@ void MainWindow::configureTableView() {
 
     )");
     tableView->setItemDelegate(new AlternateRowDelegate);
+    // Disable item selection in the QTableView
+    tableView->setSelectionMode(QAbstractItemView::NoSelection);
+
 }
 
 void MainWindow::setupGridLayout() {
@@ -204,8 +207,8 @@ void MainWindow::setupGridLayout() {
     QGridLayout *gridLayout = new QGridLayout(centralWidget);
 
     // Set column stretch factors based on the desired percentage widths
-    gridLayout->setColumnStretch(0, 1);  // 1% for first column
-    gridLayout->setColumnStretch(1, 22); // 22% for second column
+    gridLayout->setColumnStretch(0, 1);  // 1% for first column (Left Margin)
+    gridLayout->setColumnStretch(1, 15); // 15% for second column (left Hand Panel)
     gridLayout->setColumnStretch(2, 1);  // 1% for third column
     gridLayout->setColumnStretch(3, 60); // 60% for fourth column
     gridLayout->setColumnStretch(4, 10);  // 10% for fifth column
