@@ -1,4 +1,5 @@
 #include "mainwindow.h"
+#include "CustomRowHeightDelegate.h"
 #include "ui_mainwindow.h"
 
 #include <QSqlDatabase>
@@ -17,7 +18,7 @@
 #include <QItemDelegate>
 #include <QPainter>
 #include <QKeyEvent>
-
+#define BASE_COLOR_BLUE rgba(20,36,65,255)
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent), ui(new Ui::MainWindow),
     searchLineEdit(new QLineEdit(this)),
@@ -35,12 +36,14 @@ MainWindow::MainWindow(QWidget *parent)
 
 
     // Set the window icon using the given file path
-    setWindowIcon(QIcon("C:/Users/Ahmed/OneDrive/Documents/eslabProject/eslab/logo.ico"));
+    //setWindowIcon(QIcon("C:/Users/Ahmed/OneDrive/Documents/eslabProject/eslab/logo.ico"));
+    setWindowIcon(QIcon("C:/Users/ahmedabdel-ghany/Documents/EmbeddedLabProject/logo.ico"));
 
 
     setupGridLayout();
-    //"C:/Users/ahmedabdel-ghany/Documents/EmbeddedLabProject/eslab.db"
-    setupDatabaseConnection("C:/Users/Ahmed/OneDrive/Documents/eslabProject/eslab/eslab.db");
+    setupDatabaseConnection("C:/Users/ahmedabdel-ghany/Documents/EmbeddedLabProject/eslab.db");
+
+    //setupDatabaseConnection("C:/Users/Ahmed/OneDrive/Documents/eslabProject/eslab/eslab.db");
     setupUIComponents();
     connectSignalsAndSlots();
 
@@ -71,6 +74,11 @@ public:
         }
 
         QItemDelegate::paint(painter, option, index);
+    }
+    QSize sizeHint(const QStyleOptionViewItem& option, const QModelIndex& index) const override {
+        QSize size = QItemDelegate::sizeHint(option, index);
+        size.setHeight(60); // Set the desired row height here (e.g., 24 pixels)
+        return size;
     }
 };
 
@@ -155,9 +163,16 @@ void MainWindow::configureTableView() {
         for (int i = 0; i < model->columnCount(); ++i) {
             tableView->resizeColumnToContents(i);
         }
+        // Create and set the custom delegate with your desired row height (e.g., 34 pixels)
+
     }
+    //int desiredRowHeight = 34;
+   // tableView->setItemDelegate(new CustomRowHeightDelegate(desiredRowHeight));
     // Hide the vertical header (the row numbers)
     tableView->verticalHeader()->hide();
+    // Set the row height to 24 pixels
+    int desiredRowHeight = 24;
+    tableView->verticalHeader()->setDefaultSectionSize(desiredRowHeight);
     // Make scrollbars invisible but functional by setting their style
     // Hide scrollbar arrows but keep the scrollbar itself visible
     // Customize the scrollbar to hide arrows and remove shadows
@@ -169,7 +184,7 @@ void MainWindow::configureTableView() {
             height: 10px; /* Adjust the height as needed */
         }
         QScrollBar::handle:vertical, QScrollBar::handle:horizontal {
-            background: rgba(20,36,65,255);
+            background: BASE_COLOR_BLUE;
             border: none; /* Remove borders */
             border-width: 1px;
             border-radius: 5px; /* Optional: Set to 0 to have square corners */
@@ -194,10 +209,22 @@ void MainWindow::configureTableView() {
             /* Include other styling for QTableView here if necessary */
         }
 
+        QHeaderView::section {
+            background-color: rgba(20, 36, 65, 255);
+            color: white;
+            border: none;
+            font: bold 14px; /* Add 'bold' to make the font bold */
+            text-align: left; /* Center the text horizontally */
+            padding: 0; /* Set padding to 0 */
+        }
+
 
     )");
+
+    //alternating the row colors, base is white, the alternate-base is grey
     tableView->setItemDelegate(new AlternateRowDelegate);
     // Disable item selection in the QTableView
+
     tableView->setSelectionMode(QAbstractItemView::NoSelection);
 
 }
@@ -239,24 +266,32 @@ void MainWindow::setupGridLayout() {
         "background: qlineargradient("
          "x1:0, y1:0, x2:0, y2:1, "
         "stop:0 rgba(45,64,134,255), "
-        "stop:1 rgba(20,36,65,255));"
+        "stop:1 BASE_COLOR_BLUE);"
         "border-radius: 10px;" // Adjust the radius as needed
 
         );
     // Add it to the layout with a row span
     gridLayout->addWidget(blueBackgroundWidget, 1, 1, 10, 1); // Row, Column, RowSpan, ColumnSpan
 
+    // Create a QPalette and set the placeholder text color
+    QPalette palette = searchLineEdit->palette();
+    palette.setColor(QPalette::PlaceholderText, QColor(128, 128, 128, 150)); // Set placeholder text color to transparent grey
 
-    // Initialize searchLineEdit and add it to the grid layout
+
     searchLineEdit->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    // Apply the modified palette to the QLineEdit
+    searchLineEdit->setPalette(palette);
     searchLineEdit->setPlaceholderText("Enter search text");
     // Style the searchLineEdit with rounded edges
     searchLineEdit->setStyleSheet(
         "QLineEdit {"
-        "    border: 1px solid #a0a0a0;"  // Adjust color as needed
-        "    border-radius: 10px;"         // Adjust the radius as needed
-        "    padding: 0 8px;"              // Optional: Adjust text padding
-        "    selection-background-color: darkgray;"  // Optional: Adjust selection color
+        "    border: 1px solid #a0a0a0;"
+        "    border-radius: 10px;"
+        "    padding: 5px 8px;"
+        "    selection-background-color: darkgray;"
+        "    font-size: 24px;"
+        "    color: BASE_COLOR_BLUE;"
+        "    margin-bottom: 5px;" // Add a bottom margin of 5 pixels
         "}"
         );
     gridLayout->addWidget(searchLineEdit, 2, 3, 1, 1);// Row, Column, RowSpan, ColumnSpan
