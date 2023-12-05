@@ -23,11 +23,22 @@ The AUC Embedded Lab Inventory Management System is a desktop application design
 2. Open the project in Qt Creator.
 3. Build and run the application.
 
+## Features
+- **Inventory Tracking**: Keep track of components like resistors, capacitors, microcontrollers, sensors, displays, and more.
+- **Detailed Component Information**: View details such as component images, quantities, descriptions, and current availability status.
+- **Borrowing System**: Manage the borrowing status of components, including borrower information and borrowing dates.
+- **Search Functionality**: Quickly find components using the search bar.
+- **Responsive User Interface**: The application's layout adapts to different screen sizes, enhancing usability.
+
+
 ### Usage
 - **Viewing Inventory**: The main window displays the complete inventory in a tabular format.
 - **Searching for Components**: Use the search bar above the table to filter components by name.
 - **Adding New Components**: Click on the 'Add Item' button to add new components to the inventory.
 - **Editing Component Information**: Double-click on a component to edit its information.
+
+## How to Quit
+To exit the application, simply press `Ctrl + W`.
 
 ## Contributing
 Contributions to improve the application are welcome. Please follow these steps:
@@ -49,4 +60,3 @@ This project is licensed under the BSD 3-clause - see the [LICENSE.md](https://g
 ## Acknowledgments
 - AUC Embedded Systems Lab team.
 - Contributors and supporters of the project.
-
