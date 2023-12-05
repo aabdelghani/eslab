@@ -37,8 +37,7 @@ MainWindow::MainWindow(QWidget *parent)
     // Set the title of the main window
     setWindowTitle("Embedded System Lab Management");
     /* Adjust the radius for rounded corners */
-    setStyleSheet("QMainWindow { background-color: white; border-radius: 8px; border: 3px solid white; }");
-
+   // setStyleSheet("QMainWindow { background-color: white;}");
 
     // Set the window icon using the given file path
     //setWindowIcon(QIcon("C:/Users/Ahmed/OneDrive/Documents/eslabProject/eslab/logo.ico"));
@@ -51,8 +50,6 @@ MainWindow::MainWindow(QWidget *parent)
     //setupDatabaseConnection("C:/Users/Ahmed/OneDrive/Documents/eslabProject/eslab/eslab.db");
     setupUIComponents();
     connectSignalsAndSlots();
-
-
 }
 
 void MainWindow::keyPressEvent(QKeyEvent *event)
@@ -242,7 +239,7 @@ void MainWindow::setupGridLayout() {
     gridLayout->setColumnStretch(1, 15); // 15% for second column (left Hand Panel)
     gridLayout->setColumnStretch(2, 1);  // 1% for third column
     gridLayout->setColumnStretch(3, 60); // 60% for fourth column
-    gridLayout->setColumnStretch(4, 10);  // 10% for fifth column
+    gridLayout->setColumnStretch(4, 22);  // 22% for fifth column
     gridLayout->setColumnStretch(5, 1);  // 1% for sixth column
 
 
@@ -265,7 +262,7 @@ void MainWindow::setupGridLayout() {
     gridLayout->setContentsMargins(0, 0, 0, 0); // This will set the margins to zero on all sides
 
 
-    // Use variables in the style sheet
+    /****************************  Blue left Panel *****************************/
     blueBackgroundWidget->setStyleSheet(
         QString("background: qlineargradient("
                 "x1:0, y1:0, x2:0, y2:1, "
@@ -275,6 +272,21 @@ void MainWindow::setupGridLayout() {
         );
     // Add it to the layout with a row span
     gridLayout->addWidget(blueBackgroundWidget, 1, 1, 10, 1); // Row, Column, RowSpan, ColumnSpan
+
+
+    // Create an exit button with a custom style
+    QPushButton* exitButton = new QPushButton("X", this);
+    exitButton->setStyleSheet("font: bold 16px; background-color: red; color: white; border-radius: 9px;"); // Rounded corners
+    exitButton->setFixedSize(25, 25); // Set the button size as needed
+    exitButton->setCursor(Qt::PointingHandCursor); // Change cursor to a hand when hovered
+
+    // Add a signal-slot connection to close the application when the button is clicked
+    connect(exitButton, &QPushButton::clicked, qApp, &QApplication::quit);
+
+    // Add the exit button to the layout at the specified location
+    gridLayout->addWidget(exitButton, 1, 4, 1, 1); // Row: 2, Column: 4, RowSpan: 1, ColumnSpan: 1
+
+
 
     // Create a QPalette and set the placeholder text color
     QPalette palette = searchLineEdit->palette();
@@ -286,6 +298,8 @@ void MainWindow::setupGridLayout() {
     searchLineEdit->setPalette(palette);
     searchLineEdit->setPlaceholderText("Enter search text");
     // Style the searchLineEdit with rounded edges
+    searchLineEdit->setCursor(Qt::PointingHandCursor); // Change cursor to a hand when hovered
+
     searchLineEdit->setStyleSheet(
         "QLineEdit {"
         "    border: 1px solid #a0a0a0;"
@@ -298,7 +312,8 @@ void MainWindow::setupGridLayout() {
         "}"
         );
     gridLayout->addWidget(searchLineEdit, 2, 3, 1, 1);// Row, Column, RowSpan, ColumnSpan
-
-
+    centralWidget->setStyleSheet("QWidget { background-color: white; border: 20px; border-radius: 6px; }");
     setCentralWidget(centralWidget);
+    setStyleSheet("QMainWindow { background-color: white; border: 20px; border-radius: 6px; }");
+
 }
